@@ -20,6 +20,9 @@ interface IAPI{
 }
 
 app.get('/',(req:Request,res:Response)=>{
+    
+    const tweet=req.query.user
+    console.log(tweet)
     const options = {
         method: 'GET',
         headers: {
@@ -28,16 +31,20 @@ app.get('/',(req:Request,res:Response)=>{
         }
     };
     
-    fetchh('https://twitter154.p.rapidapi.com/user/tweets?username=GonnaSmeshUrBoy&limit=70&include_replies=false', options)
+    fetchh(`https://twitter154.p.rapidapi.com/user/tweets?username=${tweet}&limit=50&include_replies=true`, options)
         .then(response => response.json())
         .then(response => 
             {
 
                 response.results.forEach((i:IAPI) => {
                     let newword=i.text.replace(/@\w+/g, "");
-                    if(i.user.username!=='GonnaSmeshUrBoy') return null
+                    if(i.user.username!==tweet) return null
                     clint.push(newword)
                 });
+
+
+
+
                 res.send(clint)
             }
             )
