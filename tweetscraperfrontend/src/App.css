@@ -46,3 +46,12 @@ button:hover{
   flex-direction: row;
   gap: 20px;
 }
+
+.navP{
+  cursor:pointer;
+}
+
+footer{
+  width: max-content;
+margin:auto
+}
