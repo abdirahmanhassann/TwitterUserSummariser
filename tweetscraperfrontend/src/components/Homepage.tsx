@@ -11,9 +11,15 @@ interface IAPI{
 
 function Homepage() {
 
-    const [user,setuser]=useState('')
+    const [user,setuser]=useState<String>('')
+    const [loading,setloading]=useState<Boolean>(false)
+    const [apiinfo,setapiinfo]=useState<String>('')
+    //a8f51f3f0emsh0776f217a544603p158b49jsn947a18196a1d
+    //3080ae25famsh2a48333bf8619d4p118e5djsnbca874ca3480
 const clint:any=[]
 function clicked(e){
+    setloading(true)
+    setapiinfo('')
     e.preventDefault();
     const options = {
         method: 'GET',
@@ -23,7 +29,7 @@ function clicked(e){
         }
     };
 
-    fetch(`https://twitter154.p.rapidapi.com/user/tweets?username=${user}&limit=10&include_replies=true`, options)
+    fetch(`https://twitter154.p.rapidapi.com/user/tweets?username=${user}&limit=35&include_replies=true`, options)
         .then(response => response.json())
         .then(response => 
             {
@@ -32,30 +38,36 @@ function clicked(e){
                     if(i.user.username!==user) return null
                     clint.push(newword)
                 });
-                console.log(clint.join(''))
+                const g=clint.join('').slice(0,100)
+                console.log(g)
        
                 const options = {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json',
-                        'X-RapidAPI-Key': 'a8f51f3f0emsh0776f217a544603p158b49jsn947a18196a1d',
+                        'X-RapidAPI-Key': '3080ae25famsh2a48333bf8619d4p118e5djsnbca874ca3480',
                         'X-RapidAPI-Host': 'openai80.p.rapidapi.com'
                     },
-                    body: `{"model":"gpt-3.5-turbo","messages":[{"role":"user","content":" write a report on this user based on tweets. if it contains any derogatry or foul language skip over it :   ${clint.join('')}"}]}`
-                };
-                
+                    body: `{"model":"gpt-3.5-turbo","messages":[{"role":"user","content":" write a 1-3 paragraph report on user ${user} based on these tweets: ${g}. if it contains any derogatry or foul language,briefly educate us on why its wrong and skip over it"}]}`
+                }
                 fetch('https://openai80.p.rapidapi.com/chat/completions', options)
                     .then(response => response.json())
-                    .then(response => console.log(response))
-                    .catch(err => console.error(err));
-                
+                    .then(response => {console.log(response)
+                    setloading(false)
+                    setapiinfo(response?.choices[0]?.message.content)
+                })
+                .catch(err => {console.error(err)
+                    setloading(false)
+                    setapiinfo('error with ChatGPT API')
+                    });     
             }
             )
-        .catch(err => 
+        .catch(err =>{ 
 console.log(err)
-            );
+setloading(false)
+setapiinfo('error with Twitter API')
 
-
+           } );
 }
   return (
     <>
@@ -68,8 +80,14 @@ console.log(err)
 </nav>
 <form className='centerdiv' onSubmit={clicked}>
     <h2>Add a twitter account to summarise</h2>
-    <input  placeholder='Twitter handle (@Chelseafc)' onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setuser(e.target.value)}/>
+    <input  placeholder='Twitter handle(@Chelseafc)' onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setuser(e.target.value)}/>
     <button >Load summary</button>
+{
+    loading && <p>loading</p>
+}
+{
+    apiinfo && <p style={{    whiteSpace: 'break-spaces'}}>{apiinfo}</p>
+}
 </form>
     </>
     )
