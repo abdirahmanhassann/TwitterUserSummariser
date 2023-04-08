@@ -52,6 +52,6 @@ button:hover{
 }
 
 footer{
-  width: max-content;
-margin:auto
+  text-align-last: center;
+  margin: auto;
 }
