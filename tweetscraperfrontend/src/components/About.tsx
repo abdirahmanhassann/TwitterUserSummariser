@@ -14,7 +14,7 @@ function About() {
     </div>
 </nav>
     <div className='centerdiv'>
-        <h2>What would it take an AI to summarise someones entire lifetime online activity?</h2>
+        <h2>What would it take for an AI to summarise someones entire lifetime online activity?</h2>
         <p>This was a hobby project and I wanted to take generative AIs to the limits and see what it would take to achieve this task. It is a typical "Ship of Theseus" problem with countless variables. Since this was a hobby project, I started with two variables.
 </p>
     <li>Memory</li>

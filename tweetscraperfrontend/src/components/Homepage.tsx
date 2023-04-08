@@ -32,7 +32,7 @@ function clicked(e){
         }
     };
 
-    fetch(`https://twitter154.p.rapidapi.com/user/tweets?username=${user}&limit=35&include_replies=true`, options)
+    fetch(`https://twitter154.p.rapidapi.com/user/tweets?username=${user.replace(/@/g, "")}&limit=35&include_replies=true`, options)
         .then(response => response.json())
         .then(response => 
             {
@@ -51,7 +51,7 @@ function clicked(e){
                         'X-RapidAPI-Key': 'c20809c96dmsh0b41db4c1c11af4p1f6953jsn3cf0793e646b',
                         'X-RapidAPI-Host': 'openai80.p.rapidapi.com'
                     },
-                    body: `{"model":"gpt-3.5-turbo","messages":[{"role":"user","content":" write a 1-3 paragraph report on user ${user} based on these tweets: ${g}. if it contains any derogatry or foul language,briefly educate us on why its wrong and skip over it"}]}`
+                    body: `{"model":"gpt-3.5-turbo","messages":[{"role":"user","content":" write a 1-3 paragraph report on user ${user.replace(/@/g, "")} based on these tweets: ${g}. if it contains any derogatry or foul language,briefly educate us on why its wrong and skip over it"}]}`
                 }
                 fetch('https://openai80.p.rapidapi.com/chat/completions', options)
                     .then(response => response.json())
